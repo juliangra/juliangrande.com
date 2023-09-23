@@ -1,0 +1,71 @@
+.title::after {
+  @apply content-[''] block relative z-[-1] top-[-65px] h-[15px] w-[270px] bg-[#65bebf];
+}
+
+.item {
+  @apply max-w-lg text-sm my-4;
+}
+
+.item::after:not(:last-child) {
+  @apply content-[''] block z-[-1] h-[3px] w-[150px] mx-auto my-4 bg-[#65bebf];
+}
+
+.item .header {
+  @apply flex items-center max-sm:block max-sm:mb-1;
+}
+
+.item .header .company {
+  @apply sm:m-1 flex;
+}
+
+.item .icon {
+  @apply w-6 h-6 mr-2;
+}
+
+.item .header .company::before {
+  @apply sm:content-['-'] mr-1;
+}
+
+.item .timespan {
+  @apply font-bold text-xs uppercase;
+}
+
+.item hr {
+  @apply my-2;
+}
+
+.item h3 {
+  @apply text-lg font-bold text-[#65bebf];
+}
+
+/* Transition
+ -----------------------------*/
+.fade-items-enter-active {
+  transition: all 0.5s ease-out;
+  transition-delay: 1s;
+}
+
+.fade-items-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.fade-items-enter-from,
+.fade-items-leave-to {
+  opacity: 0;
+}
+
+
+.slide-main-enter-active {
+  transition: all 0.5s ease-out;
+  transition-delay: 1s;
+}
+
+.slide-main-leave-active {
+  transition: all 0.8s ease-out;
+  transform: translateY(5%);
+}
+
+.slide-main-enter-from,
+.slide-main-leave-to {
+  opacity: 0;
+}
