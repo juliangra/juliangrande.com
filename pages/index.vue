@@ -60,7 +60,8 @@ onMounted(() => {
           </div>
         </div>
         <div class="relative right flex items-center justify-center mt-2">
-          <video class="absolute rounded-2xl h-64 w-96 md:w-[500px] bg-[#1e1c21] shadow-xl" muted autoplay loop>
+          <video class="absolute rounded-2xl h-64 w-96 md:w-[500px] bg-[#1e1c21] shadow-xl" muted autoplay loop
+            playsinline>
             <source src="/vid/animoji.mp4" type="video/mp4" />
           </video>
           <BackgroundBlob class="max-w-full" />
