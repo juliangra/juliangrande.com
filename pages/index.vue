@@ -48,7 +48,7 @@ onMounted(() => {
             Hello, I'm <span class="text-main">Julian!</span>👋
           </h1>
           <div class="text-sm max-w-md text-muted">
-            <p class="lg:pr-10">
+            <p class="max-sm:p-2 max-sm:text-center lg:pr-10">
               I am a full-time student at NTNU and a freelance full stack
               developer. Most of my work is web-related, specializing in web
               applications with React and Vue.
@@ -63,7 +63,7 @@ onMounted(() => {
           <video class="absolute rounded-2xl h-64 w-96 md:w-[500px] bg-[#1e1c21] shadow-xl" muted autoplay loop>
             <source src="/vid/animoji.mp4" type="video/mp4" />
           </video>
-          <BackgroundBlob />
+          <BackgroundBlob class="max-w-full" />
         </div>
       </div>
     </Transition>
