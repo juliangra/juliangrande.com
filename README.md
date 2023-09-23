@@ -9,5 +9,5 @@ Developed using Nuxt with:
 - TypeScript
 - Tailwind
 - `nuxt-icon`
-- `nuxt-content` for markdown rendering of projects
+- `nuxt-content` for markdown rendering
 
