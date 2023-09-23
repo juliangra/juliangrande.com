@@ -1,7 +1,7 @@
 # My Personal Homepage - 👋
 
 A *(very)* small little website listing some of my working experience 
-and some contact details. 
+and some contact details. Made primarily to explore Nuxt and it's features
 
 ### 🔨 Technologies
 Developed using Nuxt with:
