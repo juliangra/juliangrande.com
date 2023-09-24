@@ -54,7 +54,7 @@ onMounted(() => {
               applications with React and Vue.
             </p>
           </div>
-          <div class="mt-4">
+          <div class="flex mt-4">
             <MainButton @click="aboutMeActive = true">My experience</MainButton>
             <InfoButton @click="contactMeActive = true">Contact</InfoButton>
           </div>
