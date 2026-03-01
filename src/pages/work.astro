@@ -19,22 +19,43 @@ import { SITE } from '@/data/site';
         description="A timeline of roles, projects, and milestones — the journey so far."
       />
 
-      <!-- Legend -->
-      <div class="mt-6 flex flex-wrap items-center gap-5 text-sm text-slate-500 dark:text-slate-400">
-        <span class="flex items-center gap-2">
+      <!-- Filter buttons (also serve as the legend) -->
+      <div
+        class="mt-6 flex flex-wrap items-center gap-3"
+        role="group"
+        aria-label="Filter timeline by type"
+      >
+        <button
+          class="timeline-filter-btn active inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150"
+          data-filter="all"
+          aria-pressed="true"
+        >
+          All
+        </button>
+
+        <button
+          class="timeline-filter-btn inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150"
+          data-filter="work"
+          aria-pressed="false"
+        >
           <span
-            class="h-3 w-3 rounded-full border-2 border-accent-400 bg-white dark:border-accent-300 dark:bg-slate-950"
+            class="h-2.5 w-2.5 rounded-full border-2 border-accent-400 bg-white dark:border-accent-300 dark:bg-slate-950"
             aria-hidden="true"
           ></span>
           Work
-        </span>
-        <span class="flex items-center gap-2">
+        </button>
+
+        <button
+          class="timeline-filter-btn inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150"
+          data-filter="education"
+          aria-pressed="false"
+        >
           <span
-            class="h-3 w-3 rounded-full border-2 border-accent-200 bg-white dark:border-accent-300/60 dark:bg-slate-950"
+            class="h-2.5 w-2.5 rounded-full border-2 border-accent-200 bg-white dark:border-accent-300/60 dark:bg-slate-950"
             aria-hidden="true"
           ></span>
           Education
-        </span>
+        </button>
       </div>
     </div>
 
@@ -42,3 +63,65 @@ import { SITE } from '@/data/site';
     <Timeline entries={workEntries} />
   </div>
 </BaseLayout>
+
+<style>
+  .timeline-filter-btn {
+    border-color: #e2e8f0;
+    color: #475569;
+    background: #ffffff;
+  }
+  .timeline-filter-btn:hover {
+    border-color: #9dd8d9;
+    color: #2c6768;
+    background: #e5f6f7;
+  }
+  .timeline-filter-btn.active {
+    border-color: #4da6a7;
+    color: #2c6768;
+    background: #e5f6f7;
+  }
+  :global(.dark) .timeline-filter-btn {
+    border-color: #334155;
+    color: #94a3b8;
+    background: #020617;
+  }
+  :global(.dark) .timeline-filter-btn:hover {
+    border-color: #3a8485;
+    color: #9dd8d9;
+    background: color-mix(in srgb, #0b1c1d 70%, transparent);
+  }
+  :global(.dark) .timeline-filter-btn.active {
+    border-color: #4da6a7;
+    color: #9dd8d9;
+    background: color-mix(in srgb, #0b1c1d 70%, transparent);
+  }
+</style>
+
+<script>
+  function initTimelineFilter() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.timeline-filter-btn');
+    const items = document.querySelectorAll<HTMLElement>('.timeline-item[data-type]');
+
+    function applyFilter(filter: string) {
+      buttons.forEach((btn) => {
+        const isActive = btn.dataset.filter === filter;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', String(isActive));
+      });
+
+      items.forEach((item) => {
+        const show = filter === 'all' || item.dataset.type === filter;
+        item.style.display = show ? '' : 'none';
+      });
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => applyFilter(btn.dataset.filter ?? 'all'));
+    });
+
+    // Reset to "All" on each page load / navigation
+    applyFilter('all');
+  }
+
+  document.addEventListener('astro:page-load', initTimelineFilter);
+</script>

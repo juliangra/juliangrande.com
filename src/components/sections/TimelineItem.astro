@@ -10,7 +10,7 @@ interface Props {
 const { entry, isLast = false } = Astro.props;
 ---
 
-<div class="timeline-item relative flex gap-6" class:list={[!isLast && 'pb-10']}>
+<div class="timeline-item relative flex gap-6" data-type={entry.type} class:list={[!isLast && 'pb-10']}>
   <!-- Line + dot -->
   <div class="relative flex flex-col items-center">
     <!-- Dot -->

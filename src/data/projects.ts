@@ -18,7 +18,7 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    slug: 'portfolio',
+    slug: 'juliangrande.com',
     name: 'juliangrande.com',
     description: 'This site — a personal portfolio with a blog, project showcase, and work timeline, built with Astro and Tailwind CSS.',
     longDescription: `A fully static personal website built with Astro 5 and Tailwind CSS v4.
@@ -28,7 +28,7 @@ Designed from scratch with a focus on clean typography, generous whitespace, and
     tags: ['frontend', 'open-source'],
     year: 2025,
     links: {
-      github: 'https://github.com/juliangra/portfolio',
+      github: 'https://github.com/juliangra/juliangrande.com',
       live: 'https://juliangrande.com',
     },
     featured: true,
