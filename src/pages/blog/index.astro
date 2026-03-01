@@ -49,7 +49,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
       allTags.length > 0 && (
         <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label="Filter by tag">
           <button
-            class="blog-tag-btn active rounded-full border px-3 py-1 text-xs font-medium transition-all duration-150"
+            class="blog-tag-btn active rounded-full border px-3 py-1 text-xs font-medium transition-all duration-150 hover:cursor-pointer"
             data-tag="all"
             aria-pressed="true"
           >
@@ -57,7 +57,7 @@ const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
           </button>
           {allTags.map((tag) => (
             <button
-              class="blog-tag-btn rounded-full border px-3 py-1 text-xs font-medium transition-all duration-150"
+              class="blog-tag-btn rounded-full border px-3 py-1 text-xs font-medium transition-all duration-150 hover:cursor-pointer"
               data-tag={tag}
               aria-pressed="false"
             >

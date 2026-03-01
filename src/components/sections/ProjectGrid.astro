@@ -21,7 +21,7 @@ const { projects, starMap = {} } = Astro.props;
     aria-label="Filter projects by tag"
   >
     <button
-      class="filter-btn active rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150"
+      class="filter-btn active rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150 hover:cursor-pointer"
       data-filter="all"
       aria-pressed="true"
     >
@@ -30,7 +30,7 @@ const { projects, starMap = {} } = Astro.props;
     {
       allTags.map((tag) => (
         <button
-          class="filter-btn rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150"
+          class="filter-btn rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150 hover:cursor-pointer"
           data-filter={tag}
           aria-pressed="false"
         >
