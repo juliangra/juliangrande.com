@@ -8,7 +8,7 @@ My personal website and blog. Built from scratch in early 2026 to replace an out
 
 | Technology | Role |
 |---|---|
-| [Astro 5](https://astro.build) | Framework — ships zero JS by default, first-class MDX, built-in View Transitions and sitemap |
+| [Astro 5](https://astro.build) | Framework — ships zero JS by default, first-class MDX, built-in client-side routing and sitemap |
 | [Tailwind CSS v4](https://tailwindcss.com) | Styling — configured entirely in CSS via `@tailwindcss/vite`, no config file needed |
 | MDX + Content Collections | Blog posts — git-versioned, type-safe frontmatter schemas via Zod, no CMS overhead |
 | TypeScript (strict) | Language — end-to-end type safety across data, schemas, and components |
@@ -141,5 +141,5 @@ Add an entry to the `projects` array in `src/data/projects.ts`. GitHub star coun
 - **GitHub stars** — fetched at build time from the GitHub API, works for repos across different orgs
 - **RSS feed** — `/rss.xml` includes all non-draft blog posts
 - **Sitemap** — auto-generated at build time by `@astrojs/sitemap`
-- **View Transitions** — smooth page navigation via Astro's built-in `<ViewTransitions />`
+- **View Transitions** — smooth page navigation via Astro's built-in `<ClientRouter />`
 - **SEO** — canonical URLs, OpenGraph tags, and `robots.txt` configured in `BaseLayout.astro`
