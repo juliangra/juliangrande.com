@@ -1,5 +1,6 @@
 ---
 import Badge from '@/components/ui/Badge.astro';
+import { Icon } from 'astro-icon/components';
 
 interface Props {
   title: string;
@@ -32,22 +33,13 @@ const formattedDate = date.toLocaleDateString('en-GB', {
         >
           {formattedDate}
         </time>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="text-slate-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-accent-400 dark:text-slate-600"
+        <Icon
+          name="lucide:arrow-right"
+          width={16}
+          height={16}
           aria-hidden="true"
-        >
-          <path d="M5 12h14"></path>
-          <path d="m12 5 7 7-7 7"></path>
-        </svg>
+          class="text-slate-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-accent-400 dark:text-slate-600"
+        />
       </div>
 
       <!-- Title -->

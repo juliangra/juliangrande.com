@@ -1,4 +1,6 @@
 ---
+import SectionDoodle from '@/components/illustrations/SectionDoodle.astro';
+
 interface Props {
   label?: string;
   title: string;
@@ -12,9 +14,14 @@ const { label, title, description, align = 'left' } = Astro.props;
 <div class:list={['mb-12', align === 'center' && 'text-center']}>
   {
     label && (
-      <p class="mb-3 text-sm font-semibold uppercase tracking-widest text-accent-500 dark:text-accent-300">
-        {label}
-      </p>
+      <div class:list={['mb-3 flex items-center gap-2', align === 'center' && 'justify-center']}>
+        <p class="text-sm font-semibold uppercase tracking-widest text-accent-500 dark:text-accent-300">
+          {label}
+        </p>
+        <span class="text-accent-400 dark:text-accent-500">
+          <SectionDoodle />
+        </span>
+      </div>
     )
   }
   <h2

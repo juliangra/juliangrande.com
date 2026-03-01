@@ -1,5 +1,7 @@
 ---
 import { SITE } from '@/data/site';
+import { Icon } from 'astro-icon/components';
+import HeroIllustration from '@/components/illustrations/HeroIllustration.astro';
 ---
 
 <section
@@ -23,80 +25,74 @@ import { SITE } from '@/data/site';
   </div>
 
   <div class="relative mx-auto max-w-5xl px-4 py-24 sm:px-6 sm:py-36">
-    <div class="max-w-3xl">
-      <!-- Label chip -->
-      <div
-        class="mb-6 inline-flex items-center gap-2 rounded-full border border-accent-200 bg-accent-50 px-3 py-1 dark:border-accent-800/60 dark:bg-accent-950/50"
-      >
-        <span
-          class="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-400"
-          aria-hidden="true"
-        ></span>
-        <span class="text-xs font-semibold text-accent-600 dark:text-accent-300">
-          Available for interesting projects
-        </span>
+    <div class="grid items-center gap-12 lg:grid-cols-2">
+      <!-- Left: text content -->
+      <div class="max-w-xl">
+        <!-- Label chip -->
+        <div
+          class="mb-6 inline-flex items-center gap-2 rounded-full border border-accent-200 bg-accent-50 px-3 py-1 dark:border-accent-800/60 dark:bg-accent-950/50"
+        >
+          <span
+            class="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-400"
+            aria-hidden="true"
+          ></span>
+          <span class="text-xs font-semibold text-accent-600 dark:text-accent-300">
+            Available for interesting projects
+          </span>
+        </div>
+
+        <!-- Name -->
+        <h1
+          class="text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl lg:text-7xl dark:text-white"
+        >
+          Hi, I'm{' '}
+          <span
+            class="bg-gradient-to-r from-accent-500 to-accent-300 bg-clip-text text-transparent dark:from-accent-300 dark:to-accent-200"
+          >
+            Julian.
+          </span>
+        </h1>
+
+        <!-- Tagline -->
+        <p
+          class="mt-4 text-2xl font-medium text-slate-600 sm:text-3xl dark:text-slate-300"
+        >
+          I build things for the web.
+        </p>
+
+        <!-- Bio -->
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+          Software developer based in Norway, working at{' '}
+          <a
+            href="https://bekk.no"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="font-medium text-slate-800 underline decoration-slate-300 underline-offset-2 transition-colors hover:text-accent-500 dark:text-slate-200 dark:decoration-slate-600 dark:hover:text-accent-300"
+          >Bekk</a
+          >. I care about fast, accessible, and delightful user experiences.
+        </p>
+
+        <!-- CTAs -->
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a
+            href="/work"
+            class="inline-flex items-center gap-2 rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-accent-600 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500"
+          >
+            View My Work
+            <Icon name="lucide:arrow-right" width={14} height={14} aria-hidden="true" />
+          </a>
+          <a
+            href="/blog"
+            class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-150 hover:border-slate-400 hover:bg-slate-50 hover:shadow-md dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800"
+          >
+            Read the Blog
+          </a>
+        </div>
       </div>
 
-      <!-- Name -->
-      <h1
-        class="text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl lg:text-7xl dark:text-white"
-      >
-        Hi, I'm{' '}
-        <span
-          class="bg-gradient-to-r from-accent-500 to-accent-300 bg-clip-text text-transparent dark:from-accent-300 dark:to-accent-200"
-        >
-          Julian.
-        </span>
-      </h1>
-
-      <!-- Tagline -->
-      <p
-        class="mt-4 text-2xl font-medium text-slate-600 sm:text-3xl dark:text-slate-300"
-      >
-        I build things for the web.
-      </p>
-
-      <!-- Bio -->
-      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
-        Software developer based in Norway, working at{' '}
-        <a
-          href="https://bekk.no"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-medium text-slate-800 underline decoration-slate-300 underline-offset-2 transition-colors hover:text-accent-500 dark:text-slate-200 dark:decoration-slate-600 dark:hover:text-accent-300"
-        >Bekk</a
-        >. I care about fast, accessible, and delightful user experiences.
-      </p>
-
-      <!-- CTAs -->
-      <div class="mt-8 flex flex-wrap items-center gap-3">
-        <a
-          href="/work"
-          class="inline-flex items-center gap-2 rounded-xl bg-accent-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-150 hover:bg-accent-600 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-500"
-        >
-          View My Work
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M5 12h14"></path>
-            <path d="m12 5 7 7-7 7"></path>
-          </svg>
-        </a>
-        <a
-          href="/blog"
-          class="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-150 hover:border-slate-400 hover:bg-slate-50 hover:shadow-md dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-slate-600 dark:hover:bg-slate-800"
-        >
-          Read the Blog
-        </a>
+      <!-- Right: illustration (hidden on small screens) -->
+      <div class="hidden lg:flex lg:justify-end lg:items-center" aria-hidden="true">
+        <HeroIllustration />
       </div>
     </div>
   </div>
