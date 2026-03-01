@@ -1,0 +1,99 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import { SITE } from '@/data/site';
+import Nav from '@/components/layout/Nav.astro';
+import Footer from '@/components/layout/Footer.astro';
+import '@/styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  ogImage = '/og-default.png',
+  noIndex = false,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, SITE.url);
+const fullOgImage = new URL(ogImage, SITE.url);
+---
+
+<!doctype html>
+<html lang={SITE.locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Primary meta -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={fullOgImage} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={fullOgImage} />
+
+    <!-- RSS -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${SITE.name} Blog`}
+      href="/rss.xml"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Theme: set before first paint AND after every View Transition swap -->
+    <script is:inline>
+      function applyTheme() {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = stored ?? (prefersDark ? 'dark' : 'light');
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      }
+      // Runs immediately on initial load (prevents FOUC)
+      applyTheme();
+      // Runs after every Astro View Transition DOM swap (prevents flash on navigation)
+      document.addEventListener('astro:after-swap', applyTheme);
+    </script>
+
+    <ViewTransitions />
+  </head>
+
+  <body class="min-h-dvh bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg dark:focus:bg-slate-900"
+    >
+      Skip to main content
+    </a>
+
+    <Nav />
+
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

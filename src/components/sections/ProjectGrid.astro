@@ -1,0 +1,132 @@
+---
+import type { Project } from '@/data/projects';
+import { allTags } from '@/data/projects';
+import type { StarMap } from '@/lib/github';
+import { repoNameFromUrl } from '@/lib/github';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  projects: Project[];
+  starMap?: StarMap;
+}
+
+const { projects, starMap = {} } = Astro.props;
+---
+
+<div>
+  <!-- Filter bar -->
+  <div
+    class="mb-8 flex flex-wrap items-center gap-2"
+    role="group"
+    aria-label="Filter projects by tag"
+  >
+    <button
+      class="filter-btn active rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150"
+      data-filter="all"
+      aria-pressed="true"
+    >
+      All
+    </button>
+    {
+      allTags.map((tag) => (
+        <button
+          class="filter-btn rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150"
+          data-filter={tag}
+          aria-pressed="false"
+        >
+          {tag}
+        </button>
+      ))
+    }
+  </div>
+
+  <!-- Grid -->
+  <div
+    id="project-grid"
+    class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+    aria-live="polite"
+    aria-atomic="true"
+  >
+    {projects.map((project) => {
+      const repoName = project.links.github ? repoNameFromUrl(project.links.github) : null;
+      const stars = repoName != null ? (starMap[repoName] ?? 0) : 0;
+      return <ProjectCard project={project} stars={stars} />;
+    })}
+  </div>
+
+  <!-- Empty state -->
+  <div id="empty-state" class="hidden py-16 text-center">
+    <p class="text-slate-500 dark:text-slate-400">No projects match this filter.</p>
+  </div>
+</div>
+
+<style>
+  .filter-btn {
+    border-color: #e2e8f0;
+    color: #475569;
+    background: #ffffff;
+  }
+  .filter-btn:hover {
+    border-color: #9dd8d9;
+    color: #2c6768;
+    background: #e5f6f7;
+  }
+  .filter-btn.active {
+    border-color: #4da6a7;
+    color: #2c6768;
+    background: #e5f6f7;
+  }
+  :global(.dark) .filter-btn {
+    border-color: #334155;
+    color: #94a3b8;
+    background: #0f172a;
+  }
+  :global(.dark) .filter-btn:hover {
+    border-color: #3a8485;
+    color: #9dd8d9;
+    background: color-mix(in srgb, #0b1c1d 70%, transparent);
+  }
+  :global(.dark) .filter-btn.active {
+    border-color: #4da6a7;
+    color: #9dd8d9;
+    background: color-mix(in srgb, #0b1c1d 70%, transparent);
+  }
+</style>
+
+<script>
+  function initFilter() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+    const cards = document.querySelectorAll<HTMLElement>('#project-grid article');
+    const emptyState = document.getElementById('empty-state');
+    let activeFilter = 'all';
+
+    function applyFilter(filter: string) {
+      activeFilter = filter;
+
+      buttons.forEach((btn) => {
+        const isActive = btn.dataset.filter === filter;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-pressed', String(isActive));
+      });
+
+      let visibleCount = 0;
+      cards.forEach((card) => {
+        const tags = (card.dataset.tags ?? '').split(',');
+        const show = filter === 'all' || tags.includes(filter);
+        card.style.display = show ? '' : 'none';
+        if (show) visibleCount++;
+      });
+
+      emptyState?.classList.toggle('hidden', visibleCount > 0);
+    }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => applyFilter(btn.dataset.filter ?? 'all'));
+    });
+
+    // Re-apply on page transitions
+    applyFilter(activeFilter);
+  }
+
+  document.addEventListener('astro:page-load', initFilter);
+</script>

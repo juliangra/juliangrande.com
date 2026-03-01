@@ -1,0 +1,58 @@
+---
+title: "Building with React in 2026"
+description: "A practical look at how I use React today: server components, composable patterns, and when to reach for something else entirely."
+date: 2026-03-01
+tags: ["react", "frontend", "javascript"]
+draft: false
+---
+
+React has changed enormously over the past few years. Server Components, the `use` hook, compiler optimisations in React 19 — it can be hard to know what "idiomatic React" even means anymore. Here's how I think about building with it in 2026.
+
+## Server Components First
+
+The mental model shift that's taken me longest to internalise: **reach for a Server Component first, and only opt into a Client Component when you have a concrete reason**. The concrete reasons are: interactivity (event handlers), browser APIs, or React hooks.
+
+```tsx
+// ✅ Default: Server Component — no 'use client', no JS shipped
+export default async function ProjectList() {
+  const projects = await db.query.projects.findMany();
+  return (
+    <ul>
+      {projects.map(p => <ProjectCard key={p.id} project={p} />)}
+    </ul>
+  );
+}
+```
+
+Most of the work — data fetching, layout, content rendering — can and should happen on the server.
+
+## Composable Patterns Over Prop Drilling
+
+When building UI, I now reach for the Compound Component pattern much earlier than I used to. Instead of accumulating boolean props on a single component, I design a small tree of composable parts.
+
+```tsx
+// Instead of <Card header="…" footer="…" hasBorder showShadow>
+<Card>
+  <Card.Header>…</Card.Header>
+  <Card.Body>…</Card.Body>
+  <Card.Footer>…</Card.Footer>
+</Card>
+```
+
+This keeps individual components simple and makes the call sites readable.
+
+## When to Reach for Something Else
+
+React isn't always the answer. For this portfolio site I used **Astro** — because most of what I'm rendering is static content. Shipping React's runtime to display a blog post is overkill.
+
+The rule I've landed on: use React when your UI has meaningful state and interaction. Use something lighter (Astro, plain HTML, a web component) when it doesn't.
+
+## React 19 and the Compiler
+
+React 19's compiler automatically adds memoisation where needed, removing most of the manual `useMemo`/`useCallback` calls that used to litter codebases. In practice this means fewer bugs from stale closures and less cognitive overhead.
+
+I've been running it in opt-in mode on a production Next.js app at Bekk for a few months. The results are positive — measurable render count reductions in components that deal with large data tables, with zero changes to application code.
+
+---
+
+React in 2026 is mature and well-suited for complex interactive UIs. The trick is knowing when *not* to use it. Start with the server, add interactivity intentionally, and lean on composition over configuration.

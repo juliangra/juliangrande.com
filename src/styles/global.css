@@ -1,0 +1,154 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@import "@fontsource-variable/inter";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/600.css";
+
+/* ─── Dark mode via .dark class on <html> ─────────────────────────── */
+@variant dark (&:where(.dark, .dark *));
+
+/* ─── Theme ──────────────────────────────────────────────────────────*/
+@theme {
+  --font-sans: "InterVariable", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* Custom teal accent palette built around #68bebf */
+  --color-accent-50:  #e5f6f7;
+  --color-accent-100: #c3eaeb;
+  --color-accent-200: #9dd8d9;
+  --color-accent-300: #68bebf;  /* ← base teal from juliangrande.com */
+  --color-accent-400: #4da6a7;
+  --color-accent-500: #3a8485;
+  --color-accent-600: #2c6768;
+  --color-accent-700: #1e4a4b;
+  --color-accent-800: #133031;
+  --color-accent-900: #0b1c1d;
+  --color-accent-950: #060f10;
+}
+
+/* ─── Semantic tokens ────────────────────────────────────────────── */
+:root {
+  --accent:            #3a8485;   /* accent-500 — dark enough for contrast on white */
+  --accent-hover:      #2c6768;   /* accent-600 */
+  --accent-subtle:     #e5f6f7;   /* accent-50  */
+  --accent-subtle-text:#2c6768;   /* accent-600 */
+  color-scheme: light;
+}
+
+.dark {
+  --accent:            #68bebf;   /* accent-300 — bright on dark bg */
+  --accent-hover:      #9dd8d9;   /* accent-200 */
+  --accent-subtle:     #0b1c1d;   /* accent-900 */
+  --accent-subtle-text:#9dd8d9;   /* accent-200 */
+  color-scheme: dark;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  font-variation-settings: "opsz" 32;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Focus ──────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Selection ──────────────────────────────────────────────────── */
+::selection {
+  background-color: var(--accent-subtle);
+  color: var(--accent-subtle-text);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+/* ─── Astro view transitions ─────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+::view-transition-old(root) {
+  animation: 200ms ease both fade-out;
+}
+::view-transition-new(root) {
+  animation: 250ms ease both fade-in;
+}
+@keyframes fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ─── Timeline animation ─────────────────────────────────────────── */
+.timeline-item {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Code / Shiki ────────────────────────────────────────────────── */
+pre.astro-code {
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  border: 1px solid #1e293b;
+}
+
+code:not(pre code) {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--accent-subtle);
+  color: var(--accent-subtle-text);
+  padding: 0.15em 0.45em;
+  border-radius: 0.35em;
+}
+
+/* ─── Prose overrides for blog ───────────────────────────────────── */
+.prose {
+  --tw-prose-body: theme(colors.slate.700);
+  --tw-prose-headings: theme(colors.slate.900);
+  --tw-prose-links: var(--accent);
+  --tw-prose-code: var(--accent-subtle-text);
+  --tw-prose-pre-bg: #0d1117;
+  --tw-prose-invert-body: theme(colors.slate.300);
+  --tw-prose-invert-headings: theme(colors.slate.50);
+  --tw-prose-invert-links: var(--accent);
+  --tw-prose-invert-code: var(--accent-subtle-text);
+}

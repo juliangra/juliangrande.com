@@ -1,0 +1,142 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogCard from '@/components/sections/BlogCard.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '@/data/site';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+---
+
+<BaseLayout
+  title={`Blog — ${SITE.name}`}
+  description="Writing about software, web development, and the craft of building things."
+>
+  <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
+    <div class="mb-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+      <SectionHeading
+        label="Writing"
+        title="The Blog."
+        description="Essays, notes, and thoughts on software and the web."
+      />
+      <a
+        href="/rss.xml"
+        class="inline-flex shrink-0 items-center gap-2 self-start rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-slate-300 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-700 dark:hover:text-slate-200 sm:self-auto"
+        aria-label="Subscribe via RSS"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"
+          ></path>
+        </svg>
+        RSS Feed
+      </a>
+    </div>
+
+    <!-- Tag filter -->
+    {
+      allTags.length > 0 && (
+        <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label="Filter by tag">
+          <button
+            class="blog-tag-btn active rounded-full border px-3 py-1 text-xs font-medium transition-all duration-150"
+            data-tag="all"
+            aria-pressed="true"
+          >
+            All
+          </button>
+          {allTags.map((tag) => (
+            <button
+              class="blog-tag-btn rounded-full border px-3 py-1 text-xs font-medium transition-all duration-150"
+              data-tag={tag}
+              aria-pressed="false"
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <!-- Posts -->
+    <div
+      id="blog-list"
+      class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+      aria-live="polite"
+    >
+      {
+        posts.map((post) => (
+          <article data-tags={post.data.tags.join(',')}>
+            <BlogCard
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              tags={post.data.tags}
+              href={`/blog/${post.id.replace(/\.mdx?$/, '')}`}
+            />
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .blog-tag-btn {
+    border-color: #e2e8f0;
+    color: #475569;
+    background: #ffffff;
+  }
+  .blog-tag-btn:hover,
+  .blog-tag-btn.active {
+    border-color: #9dd8d9;
+    color: #2c6768;
+    background: #e5f6f7;
+  }
+  :global(.dark) .blog-tag-btn {
+    border-color: #334155;
+    color: #94a3b8;
+    background: #0f172a;
+  }
+  :global(.dark) .blog-tag-btn:hover,
+  :global(.dark) .blog-tag-btn.active {
+    border-color: #3a8485;
+    color: #9dd8d9;
+    background: color-mix(in srgb, #0b1c1d 70%, transparent);
+  }
+</style>
+
+<script>
+  function initBlogFilter() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.blog-tag-btn');
+    const articles = document.querySelectorAll<HTMLElement>('#blog-list > article');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tag = btn.dataset.tag ?? 'all';
+
+        buttons.forEach((b) => {
+          b.classList.toggle('active', b.dataset.tag === tag);
+          b.setAttribute('aria-pressed', String(b.dataset.tag === tag));
+        });
+
+        articles.forEach((article) => {
+          const tags = (article.dataset.tags ?? '').split(',');
+          article.style.display = tag === 'all' || tags.includes(tag) ? '' : 'none';
+        });
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initBlogFilter);
+</script>

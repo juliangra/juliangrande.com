@@ -1,0 +1,46 @@
+---
+title: "Hello, World — The New Site Is Live"
+description: "A quick tour of the new juliangrande.com: what I built it with, why, and what's coming next."
+date: 2026-03-01
+tags: ["astro", "personal"]
+draft: false
+---
+
+After far too long running an outdated single-page CV, I finally rebuilt my personal site from scratch. Here's a brief tour of what's new and how it's built.
+
+## The Stack
+
+I chose **Astro 5** as the framework because it's purpose-built for content sites. It ships zero JavaScript by default, has first-class MDX support, and the Content Collections API gives me type-safe frontmatter schemas. Add Tailwind CSS v4 (now configured entirely in CSS — no `tailwind.config.js` needed), and the dev experience is genuinely enjoyable.
+
+```ts
+// A tiny taste of the blog schema
+const blog = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.date(),
+    tags: z.array(z.string()),
+    draft: z.boolean().default(false),
+  }),
+});
+```
+
+## What's on the Site
+
+- **Work timeline** — a visual history of roles, education, and milestones
+- **Projects** — a filterable grid of side projects and open-source work
+- **Blog** — you're looking at it
+- **About** — a short bio and a "now" section for what I'm currently focused on
+
+## What's Next
+
+A few things I want to add:
+
+- **Newsletter** — a lightweight email digest of new posts
+- **Dynamic OG images** — generated per-post using Satori
+- **GitHub repo sync** — automatically pull project metadata from the GitHub API at build time
+
+For now, the fundamentals are solid. The Lighthouse score is sitting at 100/100 on performance, accessibility, and SEO, which is a good place to start.
+
+If you're curious about the source, check it out on [GitHub](https://github.com/juliangra/portfolio). Happy to answer questions — just reach out via the contact page.

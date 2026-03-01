@@ -1,0 +1,133 @@
+---
+import type { WorkEntry } from '@/data/work';
+import Badge from '@/components/ui/Badge.astro';
+
+interface Props {
+  entry: WorkEntry;
+  isLast?: boolean;
+}
+
+const { entry, isLast = false } = Astro.props;
+---
+
+<div class="timeline-item relative flex gap-6" class:list={[!isLast && 'pb-10']}>
+  <!-- Line + dot -->
+  <div class="relative flex flex-col items-center">
+    <!-- Dot -->
+    <div
+      class:list={[
+        'relative z-10 mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2',
+        entry.type === 'education'
+          ? 'border-accent-200 bg-white dark:border-accent-300/60 dark:bg-slate-950'
+          : 'border-accent-400 bg-white dark:border-accent-300 dark:bg-slate-950',
+      ]}
+    >
+      <span
+        class:list={[
+          'h-1.5 w-1.5 rounded-full',
+          entry.type === 'education' ? 'bg-accent-200 dark:bg-accent-300/60' : 'bg-accent-400 dark:bg-accent-300',
+        ]}
+        aria-hidden="true"
+      ></span>
+    </div>
+
+    <!-- Vertical line -->
+    {
+      !isLast && (
+        <div class="absolute left-1/2 top-5 h-full w-px -translate-x-1/2 bg-slate-200 dark:bg-slate-800" />
+      )
+    }
+  </div>
+
+  <!-- Content -->
+  <div class="min-w-0 flex-1 pb-2">
+    <!-- Date range + location -->
+    <div class="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+      <span class="text-sm font-medium text-slate-500 dark:text-slate-400">
+        {entry.startDate} — {entry.endDate}
+      </span>
+      <span
+        class="inline-flex items-center gap-1 text-sm text-slate-400 dark:text-slate-500"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        {entry.location}
+      </span>
+    </div>
+
+    <!-- Card -->
+    <div
+      class="rounded-xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+    >
+      <!-- Company + role -->
+      <div class="mb-3">
+        <div class="flex flex-wrap items-center gap-2">
+          {
+            entry.url ? (
+              <a
+                href={entry.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-bold text-slate-900 underline decoration-slate-200 underline-offset-2 transition-colors hover:text-accent-500 dark:text-slate-50 dark:decoration-slate-700 dark:hover:text-accent-300"
+              >
+                {entry.company}
+              </a>
+            ) : (
+              <span class="font-bold text-slate-900 dark:text-slate-50">{entry.company}</span>
+            )
+          }
+          <Badge variant={entry.type === 'education' ? 'accent' : 'default'}>
+            {entry.type === 'education' ? 'Education' : 'Work'}
+          </Badge>
+        </div>
+        <p class="mt-0.5 text-sm font-medium text-slate-600 dark:text-slate-400">{entry.role}</p>
+      </div>
+
+      <!-- Summary -->
+      <p class="mb-4 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+        {entry.summary}
+      </p>
+
+      <!-- Bullets -->
+      {
+        entry.bullets.length > 0 && (
+          <ul class="mb-4 space-y-1.5" role="list">
+            {entry.bullets.map((bullet) => (
+              <li class="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                <span
+                  class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-400 dark:bg-accent-300"
+                  aria-hidden="true"
+                />
+                {bullet}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      <!-- Tech -->
+      {
+        entry.tech.length > 0 && (
+          <div class="flex flex-wrap gap-1.5">
+            {entry.tech.map((t) => (
+              <Badge>{t}</Badge>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</div>

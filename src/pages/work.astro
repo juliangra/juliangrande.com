@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Timeline from '@/components/sections/Timeline.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { workEntries } from '@/data/work';
+import { SITE } from '@/data/site';
+---
+
+<BaseLayout
+  title={`Work — ${SITE.name}`}
+  description="A timeline of my work experience, consulting roles, and education at NTNU."
+>
+  <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
+    <!-- Page header -->
+    <div class="mb-16">
+      <SectionHeading
+        label="Experience"
+        title="Work & Education"
+        description="A timeline of roles, projects, and milestones — the journey so far."
+      />
+
+      <!-- Legend -->
+      <div class="mt-6 flex flex-wrap items-center gap-5 text-sm text-slate-500 dark:text-slate-400">
+        <span class="flex items-center gap-2">
+          <span
+            class="h-3 w-3 rounded-full border-2 border-accent-400 bg-white dark:border-accent-300 dark:bg-slate-950"
+            aria-hidden="true"
+          ></span>
+          Work
+        </span>
+        <span class="flex items-center gap-2">
+          <span
+            class="h-3 w-3 rounded-full border-2 border-accent-200 bg-white dark:border-accent-300/60 dark:bg-slate-950"
+            aria-hidden="true"
+          ></span>
+          Education
+        </span>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <Timeline entries={workEntries} />
+  </div>
+</BaseLayout>

@@ -1,0 +1,148 @@
+---
+import { SITE } from '@/data/site';
+import ThemeToggle from './ThemeToggle.astro';
+
+const { pathname } = Astro.url;
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname.startsWith(href);
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-slate-200/60 bg-slate-50/80 backdrop-blur-md dark:border-slate-800/60 dark:bg-slate-950/80"
+>
+  <nav
+    class="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6"
+    aria-label="Main navigation"
+  >
+    <!-- Logo -->
+    <a
+      href="/"
+      class="group flex items-center gap-2 font-semibold text-slate-900 transition-opacity hover:opacity-80 dark:text-slate-50"
+      aria-label="Julian Grande — home"
+    >
+      <span
+        class="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-500 text-sm font-bold text-white"
+        aria-hidden="true"
+      >
+        JG
+      </span>
+      <span class="hidden sm:inline">Julian Grande</span>
+    </a>
+
+    <!-- Desktop nav links -->
+    <ul class="hidden items-center gap-1 md:flex" role="list">
+      {
+        SITE.nav.map(({ label, href }) => (
+          <li>
+            <a
+              href={href}
+              aria-current={isActive(href) ? 'page' : undefined}
+              class:list={[
+                'rounded-md px-3 py-1.5 text-sm font-medium transition-colors duration-150',
+                isActive(href)
+                  ? 'bg-accent-50 text-accent-600 dark:bg-accent-950/60 dark:text-accent-300'
+                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100',
+              ]}
+            >
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- Right side: theme toggle + mobile menu -->
+    <div class="flex items-center gap-2">
+      <ThemeToggle />
+
+      <!-- Mobile hamburger -->
+      <button
+        id="mobile-menu-btn"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200 md:hidden"
+      >
+        <svg
+          id="icon-menu"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+        <svg
+          id="icon-close"
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="hidden"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div
+    id="mobile-menu"
+    class="hidden border-t border-slate-200/60 dark:border-slate-800/60 md:hidden"
+    aria-label="Mobile navigation"
+  >
+    <ul class="flex flex-col px-4 py-3" role="list">
+      {
+        SITE.nav.map(({ label, href }) => (
+          <li>
+            <a
+              href={href}
+              aria-current={isActive(href) ? 'page' : undefined}
+              class:list={[
+                'block rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                isActive(href)
+                  ? 'text-accent-600 dark:text-accent-300'
+                  : 'text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100',
+              ]}
+            >
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</header>
+
+<script>
+  function initMobileMenu() {
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const iconMenu = document.getElementById('icon-menu');
+    const iconClose = document.getElementById('icon-close');
+
+    btn?.addEventListener('click', () => {
+      const isOpen = menu?.classList.toggle('hidden') === false;
+      btn.setAttribute('aria-expanded', String(isOpen));
+      iconMenu?.classList.toggle('hidden', isOpen);
+      iconClose?.classList.toggle('hidden', !isOpen);
+    });
+  }
+  document.addEventListener('astro:page-load', initMobileMenu);
+</script>

@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectGrid from '@/components/sections/ProjectGrid.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { projects } from '@/data/projects';
+import { SITE } from '@/data/site';
+import { buildProjectStarMap } from '@/lib/github';
+
+const sortedProjects = [...projects].sort((a, b) => b.year - a.year);
+const starMap = await buildProjectStarMap(projects, 'juliangra');
+---
+
+<BaseLayout
+  title={`Projects — ${SITE.name}`}
+  description="A collection of side projects, open-source work, and things I've built for fun."
+>
+  <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
+    <SectionHeading
+      label="Work"
+      title="Things I've built."
+      description="Side projects, open-source work, and experiments. Filter by technology or topic."
+    />
+    <ProjectGrid projects={sortedProjects} starMap={starMap} />
+  </div>
+</BaseLayout>

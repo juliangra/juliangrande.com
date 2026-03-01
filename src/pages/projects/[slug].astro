@@ -1,0 +1,183 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Badge from '@/components/ui/Badge.astro';
+import { projects } from '@/data/projects';
+import { SITE } from '@/data/site';
+import { buildProjectStarMap, repoNameFromUrl } from '@/lib/github';
+
+export async function getStaticPaths() {
+  const starMap = await buildProjectStarMap(projects, 'juliangra');
+  return projects.map((project) => {
+    const repoName = project.links.github ? repoNameFromUrl(project.links.github) : null;
+    const stars = repoName != null ? (starMap[repoName] ?? 0) : 0;
+    return {
+      params: { slug: project.slug },
+      props: { project, stars },
+    };
+  });
+}
+
+const { project, stars } = Astro.props;
+---
+
+<BaseLayout
+  title={`${project.name} — ${SITE.name}`}
+  description={project.description}
+>
+  <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
+    <!-- Back link -->
+    <a
+      href="/projects"
+      class="mb-10 inline-flex items-center gap-1.5 text-sm text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m15 18-6-6 6-6"></path>
+      </svg>
+      All projects
+    </a>
+
+    <!-- Image placeholder -->
+    <div
+      class="mb-8 flex h-52 items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-accent-50 to-accent-100 dark:border-slate-800 dark:from-accent-950/40 dark:to-accent-900/40"
+      aria-hidden="true"
+    >
+      <span class="text-7xl font-extrabold text-accent-200 dark:text-accent-900/60">
+        {project.name[0]}
+      </span>
+    </div>
+
+    <!-- Header -->
+    <header class="mb-8">
+      <div class="mb-3 flex flex-wrap items-center gap-2">
+        {project.tags.map((tag) => <Badge variant="accent">{tag}</Badge>)}
+        <span class="text-sm text-slate-400">{project.year}</span>
+        {stars > 0 && (
+          <span class="inline-flex items-center gap-1 text-sm font-medium text-slate-400 dark:text-slate-500">
+            ⭐
+            {stars} {stars === 1 ? 'star' : 'stars'} on GitHub
+          </span>
+        )}
+      </div>
+
+      <h1
+        class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-50"
+      >
+        {project.name}
+      </h1>
+      <p class="mt-2 text-lg text-slate-600 dark:text-slate-400">{project.description}</p>
+
+      <!-- Links -->
+      <div class="mt-5 flex flex-wrap gap-3">
+        {
+          project.links.live && (
+            <a
+              href={project.links.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 rounded-lg bg-accent-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-600"
+            >
+              Live Site
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </a>
+          )
+        }
+        {
+          project.links.github && (
+            <a
+              href={project.links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
+            >
+              View on GitHub
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+            </a>
+          )
+        }
+      </div>
+    </header>
+
+    <hr class="border-slate-200 dark:border-slate-800" />
+
+    <!-- Long description -->
+    <div class="mt-8">
+      <h2 class="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-50">About the project</h2>
+      <div class="dark:prose-invert max-w-none">
+        {
+          project.longDescription.split('\n').filter(Boolean).map((para) => (
+            <p class="mb-4 text-slate-600 dark:text-slate-400 leading-relaxed">{para.trim()}</p>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Tech stack -->
+    <div class="mt-10 rounded-xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-900">
+      <h2 class="mb-4 text-sm font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+        Tech Stack
+      </h2>
+      <div class="flex flex-wrap gap-2">
+        {project.stack.map((tech) => <Badge>{tech}</Badge>)}
+      </div>
+    </div>
+
+    <!-- Footer nav -->
+    <div class="mt-12 flex items-center justify-between border-t border-slate-200 pt-8 dark:border-slate-800">
+      <a
+        href="/projects"
+        class="inline-flex items-center gap-1.5 text-sm font-medium text-accent-500 transition-colors hover:text-accent-600 dark:text-accent-300 dark:hover:text-accent-200"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+        All projects
+      </a>
+    </div>
+  </div>
+</BaseLayout>

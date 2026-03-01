@@ -1,0 +1,45 @@
+---
+import type { WorkEntry } from '@/data/work';
+import TimelineItem from './TimelineItem.astro';
+
+interface Props {
+  entries: WorkEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+<div class="relative" aria-label="Career timeline">
+  {
+    entries.map((entry, i) => (
+      <TimelineItem entry={entry} isLast={i === entries.length - 1} />
+    ))
+  }
+</div>
+
+<script>
+  function initTimeline() {
+    const items = document.querySelectorAll<HTMLElement>('.timeline-item');
+    if (!items.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    items.forEach((item, i) => {
+      // Stagger the transition delay
+      (item as HTMLElement).style.transitionDelay = `${i * 60}ms`;
+      observer.observe(item);
+    });
+  }
+
+  document.addEventListener('astro:page-load', initTimeline);
+</script>
