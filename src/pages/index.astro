@@ -1,66 +1,30 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/sections/Hero.astro';
-import FeaturedProject from '@/components/sections/FeaturedProject.astro';
-import NowSection from '@/components/sections/NowSection.astro';
-import BlogCard from '@/components/sections/BlogCard.astro';
-import SectionHeading from '@/components/ui/SectionHeading.astro';
-import { getCollection } from 'astro:content';
-import { getFeaturedProjects } from '@/data/projects';
+import SelectedProjects from '@/components/home/SelectedProjects.astro';
+import Background from '@/components/home/Background.astro';
+import HomeSection from '@/components/home/HomeSection.astro';
+import { SITE } from '@/data/site';
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
-
-const [featured] = getFeaturedProjects();
+const textLink =
+  'font-medium text-slate-900 underline decoration-slate-300 underline-offset-4 transition-colors hover:decoration-accent-600 dark:text-slate-50 dark:decoration-slate-600 dark:hover:decoration-accent-300';
 ---
 
 <BaseLayout>
   <Hero />
 
-  {featured && <FeaturedProject project={featured} />}
+  <SelectedProjects />
 
-  <NowSection />
+  <Background />
 
-  <!-- Recent blog posts -->
-  <section class="border-t border-slate-200 bg-white py-20 sm:py-28 dark:border-slate-800 dark:bg-slate-900/50">
-    <div class="mx-auto max-w-5xl px-4 sm:px-6">
-      <div class="mb-10 flex items-end justify-between">
-        <SectionHeading
-          label="Writing"
-          title="From the blog."
-          description="Thoughts on software, craft, and the web."
-        />
-        <a
-          href="/blog"
-          class="hidden shrink-0 text-sm font-medium text-accent-500 transition-colors hover:text-accent-600 dark:text-accent-300 dark:hover:text-accent-200 sm:block"
-        >
-          All posts →
-        </a>
-      </div>
-
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          posts.map((post) => (
-            <BlogCard
-              title={post.data.title}
-              description={post.data.description}
-              date={post.data.date}
-              tags={post.data.tags}
-              href={`/blog/${post.id.replace(/\.mdx?$/, '')}`}
-            />
-          ))
-        }
-      </div>
-
-      <div class="mt-8 sm:hidden">
-        <a
-          href="/blog"
-          class="text-sm font-medium text-accent-500 transition-colors hover:text-accent-600 dark:text-accent-300 dark:hover:text-accent-200"
-        >
-          All posts →
-        </a>
-      </div>
-    </div>
-  </section>
+  <HomeSection id="contact-title" anchor="contact" title="Contact">
+    <p class="text-2xl tracking-tight text-slate-600 sm:text-3xl dark:text-slate-300">
+      <a href={`mailto:${SITE.email}`} class:list={[textLink, '[overflow-wrap:anywhere]']}>{SITE.email}</a>
+    </p>
+    <p class="mt-4 text-slate-600 dark:text-slate-400">
+      Email is the quickest way to reach me. I’m also on
+      <a href={SITE.social.linkedin} class={textLink}>LinkedIn</a> and
+      <a href={SITE.social.github} class={textLink}>GitHub</a>.
+    </p>
+  </HomeSection>
 </BaseLayout>

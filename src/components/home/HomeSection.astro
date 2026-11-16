@@ -1,0 +1,56 @@
+---
+import { Icon } from 'astro-icon/components';
+
+/**
+ * Homepage section on a ruled two-column grid: the heading sits in a
+ * narrow left rail, the content in the main column. Stacks on mobile.
+ * External links get the same ↗ icon used everywhere else on the page.
+ */
+interface Props {
+  id: string;
+  title: string;
+  link?: { href: string; label: string; external?: boolean };
+  /** Optional fragment target, e.g. `contact` for /#contact. */
+  anchor?: string;
+}
+
+const { id, title, link, anchor } = Astro.props;
+---
+
+<section aria-labelledby={id} id={anchor} class="scroll-mt-4">
+  <div class="mx-auto max-w-5xl px-4 sm:px-6">
+    <div
+      class="grid gap-6 border-t border-slate-200 py-12 sm:py-16 md:grid-cols-[11rem_1fr] md:gap-10 dark:border-slate-800"
+    >
+      <div>
+      <div class="flex items-baseline justify-between gap-4 md:block">
+        <h2
+          id={id}
+          class="text-base font-semibold tracking-tight text-slate-900 dark:text-slate-50"
+        >
+          {title}
+        </h2>
+        {
+          link && (
+            <a
+              href={link.href}
+              class="-my-3 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-accent-600 underline-offset-4 transition-colors hover:text-accent-700 hover:underline md:my-0 md:mt-1 dark:text-accent-300 dark:hover:text-accent-200"
+            >
+              {link.label}
+              {link.external ? (
+                <Icon name="lucide:arrow-up-right" width={14} height={14} aria-hidden="true" />
+              ) : (
+                <Icon name="lucide:arrow-right" width={14} height={14} aria-hidden="true" />
+              )}
+            </a>
+          )
+        }
+      </div>
+      {Astro.slots.has('rail') && <div class="mt-1 md:mt-2"><slot name="rail" /></div>}
+      </div>
+      <div class="min-w-0">
+        <slot />
+      </div>
+    </div>
+  </div>
+</section>

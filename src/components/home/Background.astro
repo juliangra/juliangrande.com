@@ -1,0 +1,57 @@
+---
+import { education, employerGroups, thesisOf, yearSpan } from '@/lib/work';
+import HomeSection from './HomeSection.astro';
+
+// Condensed view of src/data/work.ts: one row per employer, then each degree.
+// Employer rows use the entry's `homepage` title and highlight (see work.ts).
+type Row = { org: string; title: string; years: string; note?: string; thesis?: string };
+
+const rows: Row[] = [
+  ...employerGroups().map((g) => ({
+    org: g.company,
+    title: g.title,
+    years: g.years,
+    note: g.highlight,
+  })),
+  ...education().map((e) => ({
+    org: e.company,
+    title: e.homepage?.title ?? e.role,
+    years: yearSpan(e.startDate, e.endDate),
+    note: e.homepage?.highlight,
+    thesis: thesisOf(e),
+  })),
+];
+---
+
+<HomeSection id="background-title" title="Background" link={{ href: '/work', label: 'Full timeline' }}>
+  <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+    {
+      rows.map(({ org, title, years, note, thesis }) => (
+        <li class="py-5 first:pt-0 last:pb-0">
+          <div class="flex items-baseline justify-between gap-4">
+            <p class="text-pretty text-slate-900 dark:text-slate-50">
+              <span class="font-semibold">{org}</span>
+              <span class="block text-slate-600 sm:inline dark:text-slate-400">
+                <span class="hidden sm:inline" aria-hidden="true"> · </span>{title}
+              </span>
+            </p>
+            <span class="shrink-0 font-mono text-[0.8125rem] tabular-nums text-slate-500 dark:text-slate-400">
+              {years}
+            </span>
+          </div>
+          {thesis && (
+            <p class="mt-2 max-w-[56ch] text-pretty text-slate-900 dark:text-slate-50">
+              <span class="text-slate-600 dark:text-slate-400">Thesis: </span>
+              <span class="font-medium">{thesis}</span>
+            </p>
+          )}
+          {note && (
+            <p class="mt-1.5 max-w-[56ch] text-pretty text-[0.9375rem] leading-relaxed text-slate-600 dark:text-slate-400">
+              {note}
+            </p>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</HomeSection>
