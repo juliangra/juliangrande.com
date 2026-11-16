@@ -20,18 +20,18 @@ export const projects: Project[] = [
   {
     slug: 'juliangrande.com',
     name: 'juliangrande.com',
-    description: 'This site — a personal portfolio with a blog, project showcase, and work timeline, built with Astro and Tailwind CSS.',
+    description: 'This site — a personal portfolio with selected projects and work history, built with Astro and Tailwind CSS.',
     longDescription: `A fully static personal website built with Astro 5 and Tailwind CSS v4.
-Features MDX-powered blog posts with syntax highlighting, a filterable project grid, animated work timeline, dark mode, RSS feed, and sitemap.
+Features a work history grouped by employer, dark mode, and sitemap.
 Designed from scratch with a focus on clean typography, generous whitespace, and subtle motion.`,
-    stack: ['Astro', 'TypeScript', 'Tailwind CSS', 'MDX'],
+    stack: ['Astro', 'TypeScript', 'Tailwind CSS'],
     tags: ['frontend', 'open-source'],
     year: 2025,
     links: {
       github: 'https://github.com/juliangra/juliangrande.com',
       live: 'https://juliangrande.com',
     },
-    featured: true,
+    featured: false,
   },
   {
     slug: 'sendenv',
@@ -144,7 +144,7 @@ Data is fetched from a custom GraphQL API backed by PostgreSQL, with the fronten
       github: 'https://github.com/kartverket/skipctl',
       live: 'https://skip.kartverket.no',
     },
-    featured: false,
+    featured: true,
   },
   {
     slug: 'finance-manager',
@@ -162,11 +162,6 @@ Users can create accounts, make deposits and withdrawals, transfer funds between
   },
 ];
 
-export const allTags = [...new Set(projects.flatMap((p) => p.tags))].sort();
-
-export function getProjectBySlug(slug: string): Project | undefined {
-  return projects.find((p) => p.slug === slug);
-}
 
 export function getFeaturedProjects(): Project[] {
   return projects.filter((p) => p.featured);

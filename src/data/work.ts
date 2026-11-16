@@ -9,6 +9,15 @@ export interface WorkEntry {
   tech: string[];
   type: 'work' | 'education';
   url?: string;
+  /**
+   * Homepage summary. Set on one entry per employer (usually the newest):
+   * the homepage Background list shows one row per employer, using this
+   * title and highlight, with years spanning all of that employer's entries.
+   */
+  homepage?: {
+    title: string;
+    highlight?: string;
+  };
 }
 
 export const workEntries: WorkEntry[] = [
@@ -31,6 +40,11 @@ export const workEntries: WorkEntry[] = [
     ],
     type: 'work',
     url: 'https://bekk.no',
+    homepage: {
+      title: 'Software Developer',
+      highlight:
+        'Full-time since 2025, after two summer internships. As an intern I designed and built portal.trondheim2025.no, the programme portal for the 2025 FIS Nordic World Ski Championships.',
+    },
   },
   {
     company: 'Junior Consulting',
@@ -48,6 +62,11 @@ export const workEntries: WorkEntry[] = [
     tech: ['Project Management', 'LangSmith', 'Hono', 'TypeScript'],
     type: 'work',
     url: 'https://juniorconsulting.no',
+    homepage: {
+      title: 'Project Manager',
+      highlight:
+        'Led development of LLM-powered web applications for clients, along with planning, delivery and sales.',
+    },
   },
   {
     company: 'Disruptive Technologies',
@@ -65,6 +84,11 @@ export const workEntries: WorkEntry[] = [
     tech: ['React', 'TypeScript', 'Google Cloud Platform', 'Terraform', 'Docker', 'Kubernetes', 'API Design'],
     type: 'work',
     url: 'https://www.disruptive-technologies.com',
+    homepage: {
+      title: 'Full-Stack Developer',
+      highlight:
+        'Three roles on the cloud team, building tools for planning and installing IoT sensors, starting with a radio-signal estimator, on Google Cloud and Kubernetes.',
+    },
   },
   {
     company: 'Bekk',
@@ -85,7 +109,7 @@ export const workEntries: WorkEntry[] = [
     url: 'https://bekk.no',
   },
   {
-    company: 'NTNU — Dept. of Computer Science',
+    company: 'NTNU Department of Computer Science',
     role: 'Teaching Assistant — TDT4140 Software Engineering',
     startDate: 'Jan 2024',
     endDate: 'May 2024',
@@ -100,9 +124,14 @@ export const workEntries: WorkEntry[] = [
     tech: ['Agile', 'Scrum'],
     type: 'work',
     url: 'https://ntnu.no',
+    homepage: {
+      title: 'Teaching and Research Assistant',
+      highlight:
+        'Lectured web technologies to large cohorts and led the teaching assistants for the course.',
+    },
   },
   {
-    company: 'NTNU — Dept. of Computer Science',
+    company: 'NTNU Department of Computer Science',
     role: 'Research Assistant — IT2805 Web Technologies',
     startDate: 'Aug 2022',
     endDate: 'Dec 2024',
@@ -170,7 +199,7 @@ export const workEntries: WorkEntry[] = [
     url: 'https://www.disruptive-technologies.com',
   },
   {
-    company: 'NTNU — Dept. of Computer Science',
+    company: 'NTNU Department of Computer Science',
     role: 'Teaching Assistant — DCST1007 Object-Oriented Programming',
     startDate: 'Jan 2022',
     endDate: 'Jun 2022',
@@ -186,7 +215,7 @@ export const workEntries: WorkEntry[] = [
     url: 'https://ntnu.no',
   },
   {
-    company: 'NTNU — Dept. of Computer Science',
+    company: 'NTNU Department of Computer Science',
     role: 'Teaching Assistant — IT2805 Web Technologies',
     startDate: 'Aug 2021',
     endDate: 'Dec 2021',
@@ -230,7 +259,7 @@ export const workEntries: WorkEntry[] = [
       'Three-year degree covering algorithms, data structures, software engineering, databases, and operating systems.',
     bullets: [
       'Final project: full-stack web application for collaborative task management',
-      'Member of Online linjeforening (and developer in the systems committee)',
+      'Member of Online, the student association for informatics, and developer in its systems committee',
       'Coursework in algorithms, data structures, software engineering, databases, and operating systems',
     ],
     tech: [],

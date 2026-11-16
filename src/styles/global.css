@@ -1,9 +1,7 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
 @import "@fontsource-variable/inter";
 @import "@fontsource/jetbrains-mono/400.css";
-@import "@fontsource/jetbrains-mono/600.css";
 
 /* ─── Dark mode via .dark class on <html> ─────────────────────────── */
 @variant dark (&:where(.dark, .dark *));
@@ -52,7 +50,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -66,10 +63,15 @@ body {
 }
 
 /* ─── Focus ──────────────────────────────────────────────────────── */
+/* Colour and offset are set at rest so transition utilities never animate
+   the ring in from currentColor when focus arrives. */
+:where(a, button, input, select, textarea, summary, [tabindex]) {
+  outline-color: var(--accent);
+  outline-offset: 3px;
+}
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 4px;
 }
 
 /* ─── Selection ──────────────────────────────────────────────────── */
@@ -110,45 +112,15 @@ body {
   to   { opacity: 0; }
 }
 
-/* ─── Timeline animation ─────────────────────────────────────────── */
-.timeline-item {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.timeline-item.visible {
-  opacity: 1;
-  transform: translateY(0);
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
-/* ─── Code / Shiki ────────────────────────────────────────────────── */
-pre.astro-code {
-  border-radius: 0.75rem;
-  padding: 1.25rem 1.5rem;
-  overflow-x: auto;
-  font-size: 0.875rem;
-  line-height: 1.7;
-  border: 1px solid #1e293b;
-}
-
-code:not(pre code) {
-  font-family: var(--font-mono);
-  font-size: 0.875em;
-  background: var(--accent-subtle);
-  color: var(--accent-subtle-text);
-  padding: 0.15em 0.45em;
-  border-radius: 0.35em;
-}
-
-/* ─── Prose overrides for blog ───────────────────────────────────── */
-.prose {
-  --tw-prose-body: theme(colors.slate.700);
-  --tw-prose-headings: theme(colors.slate.900);
-  --tw-prose-links: var(--accent);
-  --tw-prose-code: var(--accent-subtle-text);
-  --tw-prose-pre-bg: #0d1117;
-  --tw-prose-invert-body: theme(colors.slate.300);
-  --tw-prose-invert-headings: theme(colors.slate.50);
-  --tw-prose-invert-links: var(--accent);
-  --tw-prose-invert-code: var(--accent-subtle-text);
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }

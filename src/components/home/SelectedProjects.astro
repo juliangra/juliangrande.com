@@ -1,0 +1,66 @@
+---
+import { Icon } from 'astro-icon/components';
+import { getFeaturedProjects } from '@/data/projects';
+import { SITE } from '@/data/site';
+import HomeSection from './HomeSection.astro';
+
+// Pick which projects appear here with `featured: true` in src/data/projects.ts.
+// Each row links straight to the project's repository (or its live site if it has none).
+const selected = getFeaturedProjects().map((project) => ({
+  ...project,
+  href: project.links.github ?? project.links.live,
+  where: project.links.github ? 'on GitHub' : 'live site',
+}));
+---
+
+{
+  selected.length > 0 && (
+    <HomeSection
+      id="projects-title"
+      title="Selected projects"
+      link={
+        SITE.social.github
+          ? { href: `${SITE.social.github}?tab=repositories`, label: 'More on GitHub', external: true }
+          : undefined
+      }
+    >
+      <ul class="divide-y divide-slate-200 dark:divide-slate-800" role="list">
+        {selected.map((project) => (
+          <li class="group relative py-6 first:pt-0 last:pb-0">
+            <div class="flex items-baseline justify-between gap-4">
+              <h3 class="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-50">
+                {project.href ? (
+                  <a
+                    href={project.href}
+                    class="inline-flex items-center gap-1 underline decoration-transparent decoration-2 underline-offset-4 transition-colors group-hover:text-accent-600 group-hover:decoration-accent-600/40 after:absolute after:inset-0 dark:group-hover:text-accent-300 dark:group-hover:decoration-accent-300/40"
+                  >
+                    {project.name}
+                    <span class="sr-only"> ({project.where})</span>
+                    <Icon
+                      name="lucide:arrow-up-right"
+                      width={16}
+                      height={16}
+                      aria-hidden="true"
+                      class="text-slate-500 transition-colors group-hover:text-accent-600 dark:text-slate-400 dark:group-hover:text-accent-300"
+                    />
+                  </a>
+                ) : (
+                  project.name
+                )}
+              </h3>
+              <span class="shrink-0 font-mono text-[0.8125rem] tabular-nums text-slate-500 dark:text-slate-400">
+                {project.year}
+              </span>
+            </div>
+            <p class="mt-1.5 max-w-[56ch] text-pretty text-slate-600 dark:text-slate-400">
+              {project.description}
+            </p>
+            <p class="mt-2 font-mono text-[0.8125rem] text-slate-500 dark:text-slate-400">
+              {project.stack.join(' · ')}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </HomeSection>
+  )
+}
